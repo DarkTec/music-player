@@ -3,27 +3,12 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './components/App/App';
 import * as serviceWorker from './serviceWorker';
-import {
-    Container,
-    Dropdown,
-    Menu,
-} from 'semantic-ui-react';
+import { Container } from 'semantic-ui-react';
 
 ReactDOM.render(
-    <React.StrictMode>
-        <Menu fixed='top' inverted>
-            <Container fluid>
-                <Dropdown item simple text='File'>
-                    <Dropdown.Menu>
-                        <Dropdown.Item>Quit</Dropdown.Item>
-                    </Dropdown.Menu>
-                </Dropdown>
-            </Container>
-        </Menu>
-        <Container inverted="true" fluid style={{ marginTop: '2.85714286em' }}>
-            <App />
-        </Container>
-    </React.StrictMode>,
+    <Container inverted="true" fluid>
+        <App />
+    </Container>,
     document.getElementById('root')
 );
 

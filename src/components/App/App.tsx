@@ -29,7 +29,7 @@ function App() {
 
 
     useEffect(() => {
-        const loc = "C:\\Users\\mantl\\Music\\MusicBee\\Music\\Take That";
+        const loc = prompt("Enter the folder path");
         (async () => {
             for await (const f of getFiles(loc)) {
                 const tags: any = NodeID3.read(f);
@@ -48,13 +48,13 @@ function App() {
         let tagSplit = tags.location.split("\\");
         let tagName = tagSplit[tagSplit.length - 1];
 
-        if (audioName != tagName) {
+        if (audioName !== tagName) {
             audio.src = tags.location;
             audio.play();
             setPlaying(index);
         }
 
-        if (audioName == tagName) {
+        if (audioName === tagName) {
             audio.pause();
             audio.src = '';
             setPlaying(null);

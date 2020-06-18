@@ -1,4 +1,3 @@
-.MuiContainer-root {
-    height: 98vh;
-    overflow: auto;
+body {
+    background-color: rgb(51, 51, 51);
 }

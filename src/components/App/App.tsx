@@ -69,7 +69,7 @@ function App() {
 
             return;
         }
-        
+
         setColumn(clickedColumn);
         setFiles(files.reverse());
         setDirection(direction === 'ascending' ? 'descending' : 'ascending');
@@ -92,7 +92,7 @@ function App() {
                         <Table.Row key={index}>
                             <Table.Cell>
                                 {playing !== index
-                                    ? <Button content='Play' onClick={handleClick.bind(this, value, index)} />
+                                    ? <Button content='Play' onClick={handleClick.bind(this)} />
                                     : <Button content='Stop' onClick={handleClick.bind(this, value, index)} />
                                 }
                             </Table.Cell>

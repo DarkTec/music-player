@@ -16,10 +16,11 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "semantic-ui-react": "^0.88.2",
-    "typescript": "^3.7.5"
+    "typescript": "^3.7.5",
+    "util": "^0.12.3"
   },
   "scripts": {
-    "start": "nw-react-scripts start",
+    "start": "nw-react-scripts start --enable-node-worker",
     "build": "nw-react-scripts build",
     "test": "nw-react-scripts test",
     "eject": "nw-react-scripts eject"

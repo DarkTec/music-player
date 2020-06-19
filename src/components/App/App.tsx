@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import NodeID3 from "node-id3";
 import { Table, Icon, Menu, Container, Input } from "semantic-ui-react";
-import { sortBy, filter } from "lodash";
+import { sortBy } from "lodash";
 import LoadingOverlay from 'react-loading-overlay';
+import Fuse from "fuse.js";
 
 const { resolve } = require('path');
 const { readdir } = require('fs').promises;
@@ -24,18 +25,18 @@ function App() {
 
     const [files, setFiles] = useState([]);
     const [playing, setPlaying] = useState();
-    const [audio, setAudio] = useState(new Audio());
+    const [audio, setAudio]: any = useState();
     const [column, setColumn] = useState(null);
     const [direction, setDirection] = useState(null);
     const [loading, setLoading] = useState(true);
     const [filterStr, setFilter] = useState('');
+    const [fuse, setFuse]: any = useState();
 
 
     useEffect(() => {
         setAudio(new Audio());
 
         const loc = prompt("Enter the folder path");
-        //const loc = "C:\\Users\\mantl\\Music\\MusicBee\\Music\\Take That";
         (async () => {
             const res = [];
             for await (const f of getFiles(loc)) {
@@ -46,10 +47,14 @@ function App() {
                 }
             }
             setFiles(res);
+
+            const options = { threshold: 0.1, keys: ['title', 'artist', 'album'] };
+            const myIndex = Fuse.createIndex(options.keys, res)
+            setFuse(new Fuse(res, options, myIndex));
+
             setLoading(false);
         })()
     }, []);
-
     const handleClick = (tags, index) => {
         let audioSplit = audio.src.split("/");
         let audioName = decodeURIComponent(audioSplit[audioSplit.length - 1]);
@@ -109,11 +114,23 @@ function App() {
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {filter(files, (file) =>
-                        file.album.toLowerCase().includes(filterStr.toLowerCase()) ||
-                        file.title.toLowerCase().includes(filterStr.toLowerCase()) ||
-                        file.artist.toLowerCase().includes(filterStr.toLowerCase()))
-                        .map((value, index) => {
+                    {filterStr
+                        ? fuse?.search(filterStr).map((value, index) => {
+                            return (
+                                <Table.Row key={index}>
+                                    <Table.Cell>
+                                        {playing !== index
+                                            ? <Icon name='play' onClick={handleClick.bind(this, value.item, index)} />
+                                            : <Icon name='stop' onClick={handleClick.bind(this, value.item, index)} />
+                                        }
+                                    </Table.Cell>
+                                    <Table.Cell>{value.item.album}</Table.Cell>
+                                    <Table.Cell>{value.item.artist}</Table.Cell>
+                                    <Table.Cell>{value.item.title}</Table.Cell>
+                                </Table.Row>
+                            )
+                        })
+                        : files.map((value, index) => {
                             return (
                                 <Table.Row key={index}>
                                     <Table.Cell>
@@ -127,7 +144,8 @@ function App() {
                                     <Table.Cell>{value.title}</Table.Cell>
                                 </Table.Row>
                             )
-                        })}
+                        })
+                    }
                 </Table.Body>
             </Table>
         </LoadingOverlay>

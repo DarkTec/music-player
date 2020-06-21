@@ -56,7 +56,9 @@
     "react-app-polyfill": "^1.0.6",
     "react-dev-utils": "^10.2.1",
     "react-dom": "^16.13.1",
+    "react-indexed-db": "^1.0.12",
     "react-loading-overlay": "^1.0.1",
+    "react-router-dom": "^5.2.0",
     "resolve": "1.15.0",
     "resolve-url-loader": "3.1.1",
     "sass-loader": "8.0.2",
@@ -73,6 +75,10 @@
     "webpack-dev-server": "3.10.3",
     "webpack-manifest-plugin": "2.2.0",
     "workbox-webpack-plugin": "4.3.1"
+  },
+  "window": {
+    "width": 1366,
+    "height": 768
   },
   "scripts": {
     "start": "node scripts/start.js --enable-node-worker",
@@ -162,5 +168,8 @@
     "presets": [
       "react-app"
     ]
+  },
+  "devDependencies": {
+    "@types/react-router-dom": "^5.1.5"
   }
 }

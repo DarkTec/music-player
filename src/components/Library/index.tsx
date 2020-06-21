@@ -1,60 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import './App.css';
-import NodeID3 from "node-id3";
-import { Table, Icon, Menu, Container, Input } from "semantic-ui-react";
-import { sortBy } from "lodash";
-import LoadingOverlay from 'react-loading-overlay';
 import Fuse from "fuse.js";
-
-const { resolve } = require('path');
-const { readdir } = require('fs').promises;
-
-async function* getFiles(dir) {
-    const dirents = await readdir(dir, { withFileTypes: true });
-    for (const dirent of dirents) {
-        const res = resolve(dir, dirent.name);
-        if (dirent.isDirectory()) {
-            yield* getFiles(res);
-        } else {
-            yield res;
-        }
-    }
-}
+import { sortBy } from "lodash";
+import React, { useEffect, useState } from 'react';
+import { useIndexedDB } from 'react-indexed-db';
+import { Container, Icon, Input, Menu, Table } from "semantic-ui-react";
+import './index.css';
 
 function App() {
 
+    // eslint-disable-next-line
+    const [songsDB, setDB2] = useState(useIndexedDB('songs'));
     const [files, setFiles] = useState([]);
     const [playing, setPlaying] = useState();
     const [audio, setAudio]: any = useState();
     const [column, setColumn] = useState(null);
     const [direction, setDirection] = useState(null);
-    const [loading, setLoading] = useState(true);
     const [filterStr, setFilter] = useState('');
     const [fuse, setFuse]: any = useState();
 
 
     useEffect(() => {
         setAudio(new Audio());
-
-        const loc = prompt("Enter the folder path");
         (async () => {
-            const res = [];
-            for await (const f of getFiles(loc)) {
-                const tags: any = NodeID3.read(f);
-                if (tags) {
-                    tags.location = f;
-                    res.push(tags);
-                }
-            }
-            setFiles(res);
-
+            const songs = await songsDB.getAll();
             const options = { threshold: 0.1, keys: ['title', 'artist', 'album'] };
-            const myIndex = Fuse.createIndex(options.keys, res)
-            setFuse(new Fuse(res, options, myIndex));
+            const myIndex = Fuse.createIndex(options.keys, songs);
 
-            setLoading(false);
-        })()
-    }, []);
+            setFiles(songs);
+            setFuse(new Fuse(songs, options, myIndex));
+        })();
+    }, [songsDB]);
+
     const handleClick = (tags, index) => {
         let audioSplit = audio.src.split("/");
         let audioName = decodeURIComponent(audioSplit[audioSplit.length - 1]);
@@ -91,12 +66,7 @@ function App() {
     };
 
     return (
-        <LoadingOverlay
-            active={loading}
-            spinner
-            text='Indexing...'
-        >
-
+        <Container fluid>
             <Menu fixed='top' inverted>
                 <Container fluid>
                     <Menu.Item>
@@ -111,6 +81,8 @@ function App() {
                         <Table.HeaderCell sorted={column === 'album' ? direction : null} onClick={handleSort.bind(this, 'album')}>Album</Table.HeaderCell>
                         <Table.HeaderCell sorted={column === 'artist' ? direction : null} onClick={handleSort.bind(this, 'artist')}>Artist</Table.HeaderCell>
                         <Table.HeaderCell sorted={column === 'title' ? direction : null} onClick={handleSort.bind(this, 'title')}>Title</Table.HeaderCell>
+                        <Table.HeaderCell sorted={column === 'genre' ? direction : null} onClick={handleSort.bind(this, 'genre')}>Genre</Table.HeaderCell>
+                        <Table.HeaderCell sorted={column === 'year' ? direction : null} onClick={handleSort.bind(this, 'year')}>Year</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -127,6 +99,8 @@ function App() {
                                     <Table.Cell>{value.item.album}</Table.Cell>
                                     <Table.Cell>{value.item.artist}</Table.Cell>
                                     <Table.Cell>{value.item.title}</Table.Cell>
+                                    <Table.Cell>{value.item.genre}</Table.Cell>
+                                    <Table.Cell>{value.item.year}</Table.Cell>
                                 </Table.Row>
                             )
                         })
@@ -142,13 +116,15 @@ function App() {
                                     <Table.Cell>{value.album}</Table.Cell>
                                     <Table.Cell>{value.artist}</Table.Cell>
                                     <Table.Cell>{value.title}</Table.Cell>
+                                    <Table.Cell>{value.genre}</Table.Cell>
+                                    <Table.Cell>{value.year}</Table.Cell>
                                 </Table.Row>
                             )
                         })
                     }
                 </Table.Body>
             </Table>
-        </LoadingOverlay>
+        </Container>
     );
 }
 

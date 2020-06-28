@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { initDB } from 'react-indexed-db';
 import { useHistory, BrowserRouter as Router, Route, Switch } from "react-router-dom";
@@ -10,6 +10,11 @@ import * as serviceWorker from './serviceWorker';
 import Library from "./components/Library";
 import Dashboard from 'components/Dashboard';
 import Settings from 'components/Settings';
+import { createStore } from 'redux';
+import reducer from "./redux/reducers";
+import { Provider, useSelector } from 'react-redux';
+
+const store = createStore(reducer);
 
 initDB(DBConfig);
 
@@ -19,7 +24,21 @@ win.maximize();
 
 function TabMenu() {
     const history = useHistory();
-    const [route, setRoute] = useState("/home")
+    const [route, setRoute] = useState("/home");
+    const [playing, setPlaying] = useState();
+    const [audio, setAudio]: any = useState(new Audio(""));
+    const result: any = useSelector<any>(state => state.songs);
+
+    useEffect(() => {
+        if (result?.playing) {
+            audio.src = result.text;
+            audio.play();
+        } else {
+            audio.pause();
+            audio.src = '';
+            setPlaying(null);
+        }
+    }, [result])
 
     const handleClick = (url) => {
         history.push(url);
@@ -46,23 +65,26 @@ function TabMenu() {
     )
 }
 
+
 ReactDOM.render(
-    <Router>
-        <Container inverted="true" fluid style={{ marginTop: '2.85714286em' }}>
-            <TabMenu />
-            <Switch>
-                <Route path="/settings">
-                    <Settings />
-                </Route>
-                <Route path="/library">
-                    <Library />
-                </Route>
-                <Route path="/">
-                    <Dashboard />
-                </Route>
-            </Switch>
-        </Container>
-    </Router>,
+    <Provider store={store}>
+        <Router>
+            <Container inverted="true" fluid style={{ marginTop: '2.85714286em' }}>
+                <TabMenu />
+                <Switch>
+                    <Route path="/settings">
+                        <Settings />
+                    </Route>
+                    <Route path="/library">
+                        <Library />
+                    </Route>
+                    <Route path="/">
+                        <Dashboard />
+                    </Route>
+                </Switch>
+            </Container>
+        </Router>
+    </Provider>,
     document.getElementById('root')
 );
 

@@ -4,22 +4,25 @@ import React, { useEffect, useState } from 'react';
 import { useIndexedDB } from 'react-indexed-db';
 import { Container, Icon, Input, Menu, Table } from "semantic-ui-react";
 import './index.css';
+import { changeSong } from "redux/actions";
+import { useDispatch, useSelector } from "react-redux";
 
 function App() {
 
     // eslint-disable-next-line
     const [songsDB, setDB2] = useState(useIndexedDB('songs'));
     const [files, setFiles] = useState([]);
-    const [playing, setPlaying] = useState();
-    const [audio, setAudio]: any = useState();
     const [column, setColumn] = useState(null);
     const [direction, setDirection] = useState(null);
     const [filterStr, setFilter] = useState('');
     const [fuse, setFuse]: any = useState();
+    const [, updateState] = React.useState();
+    const forceUpdate = React.useCallback(() => updateState({}), []);
 
+    const dispatch = useDispatch();
+    const playing: any = useSelector<any>(state => state.songs);
 
     useEffect(() => {
-        setAudio(new Audio());
         (async () => {
             const songs = await songsDB.getAll();
             const options = { threshold: 0.1, keys: ['title', 'artist', 'album'] };
@@ -31,23 +34,12 @@ function App() {
     }, [songsDB]);
 
     const handleClick = (tags, index) => {
-        let audioSplit = audio.src.split("/");
-        let audioName = decodeURIComponent(audioSplit[audioSplit.length - 1]);
-
-        let tagSplit = tags.location.split("\\");
-        let tagName = tagSplit[tagSplit.length - 1];
-
-        if (audioName !== tagName) {
-            audio.src = tags.location;
-            audio.play();
-            setPlaying(index);
+        if (playing?.text === tags.location && playing?.playing) {
+            dispatch(changeSong(tags.location, false));
+        } else {
+            dispatch(changeSong(tags.location, true));
         }
-
-        if (audioName === tagName) {
-            audio.pause();
-            audio.src = '';
-            setPlaying(null);
-        }
+        forceUpdate();
     }
 
     const handleSort = (clickedColumn) => {
@@ -91,7 +83,7 @@ function App() {
                             return (
                                 <Table.Row key={index}>
                                     <Table.Cell>
-                                        {playing !== index
+                                        {playing?.text !== value.location
                                             ? <Icon name='play' onClick={handleClick.bind(this, value.item, index)} />
                                             : <Icon name='stop' onClick={handleClick.bind(this, value.item, index)} />
                                         }
@@ -105,12 +97,13 @@ function App() {
                             )
                         })
                         : files.map((value, index) => {
+                            console.log(playing?.text, value.location);
                             return (
                                 <Table.Row key={index}>
                                     <Table.Cell>
-                                        {playing !== index
-                                            ? <Icon name='play' onClick={handleClick.bind(this, value, index)} />
-                                            : <Icon name='stop' onClick={handleClick.bind(this, value, index)} />
+                                        {playing && playing.playing && playing.text === value.location
+                                            ? <Icon name='stop' onClick={handleClick.bind(this, value, index)} />
+                                            : <Icon name='play' onClick={handleClick.bind(this, value, index)} />
                                         }
                                     </Table.Cell>
                                     <Table.Cell>{value.album}</Table.Cell>

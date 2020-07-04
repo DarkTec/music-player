@@ -1,6 +1,6 @@
 {
   "name": "music-player",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "private": true,
   "dependencies": {
     "@babel/core": "7.10.2",
@@ -87,8 +87,7 @@
     "start": "node scripts/start.js --enable-node-worker",
     "build": "node scripts/build.js",
     "test": "snyk test && node scripts/test.js",
-    "snyk-protect": "snyk protect",
-    "prepare": "npm run snyk-protect"
+    "release": "release-it"
   },
   "eslintConfig": {
     "extends": "nw-react-app"
@@ -176,7 +175,7 @@
   },
   "devDependencies": {
     "@types/react-redux": "^7.1.9",
-    "@types/react-router-dom": "^5.1.5"
-  },
-  "snyk": true
+    "@types/react-router-dom": "^5.1.5",
+    "release-it": "^13.6.4"
+  }
 }

@@ -34,10 +34,10 @@ function App() {
     }, [songsDB]);
 
     const handleClick = (tags, index) => {
-        if (playing?.text === tags.location && playing?.playing) {
-            dispatch(changeSong(tags.location, false));
+        if (playing?.tags.location === tags.location && playing?.playing) {
+            dispatch(changeSong(tags, false));
         } else {
-            dispatch(changeSong(tags.location, true));
+            dispatch(changeSong(tags, true));
         }
         forceUpdate();
     }
@@ -83,7 +83,7 @@ function App() {
                             return (
                                 <Table.Row key={index}>
                                     <Table.Cell>
-                                        {playing?.text !== value.location
+                                        {playing?.tags.location !== value.location
                                             ? <Icon name='play' onClick={handleClick.bind(this, value.item, index)} />
                                             : <Icon name='stop' onClick={handleClick.bind(this, value.item, index)} />
                                         }
@@ -97,11 +97,10 @@ function App() {
                             )
                         })
                         : files.map((value, index) => {
-                            console.log(playing?.text, value.location);
                             return (
                                 <Table.Row key={index}>
                                     <Table.Cell>
-                                        {playing && playing.playing && playing.text === value.location
+                                        {playing && playing.playing && playing.tags.location === value.location
                                             ? <Icon name='stop' onClick={handleClick.bind(this, value, index)} />
                                             : <Icon name='play' onClick={handleClick.bind(this, value, index)} />
                                         }

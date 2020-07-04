@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, RefObject } from 'react';
 import ReactDOM from 'react-dom';
 import { initDB } from 'react-indexed-db';
 import { useHistory, BrowserRouter as Router, Route, Switch } from "react-router-dom";
@@ -12,7 +12,8 @@ import Dashboard from 'components/Dashboard';
 import Settings from 'components/Settings';
 import { createStore } from 'redux';
 import reducer from "./redux/reducers";
-import { Provider, useSelector } from 'react-redux';
+import { Provider, useSelector, useDispatch } from 'react-redux';
+import { changeSong } from "redux/actions";
 
 const store = createStore(reducer);
 
@@ -25,20 +26,6 @@ win.maximize();
 function TabMenu() {
     const history = useHistory();
     const [route, setRoute] = useState("/home");
-    const [playing, setPlaying] = useState();
-    const [audio, setAudio]: any = useState(new Audio(""));
-    const result: any = useSelector<any>(state => state.songs);
-
-    useEffect(() => {
-        if (result?.playing) {
-            audio.src = result.text;
-            audio.play();
-        } else {
-            audio.pause();
-            audio.src = '';
-            setPlaying(null);
-        }
-    }, [result])
 
     const handleClick = (url) => {
         history.push(url);
@@ -65,11 +52,43 @@ function TabMenu() {
     )
 }
 
+function MainApp() {
+    const [playing, setPlaying] = useState(false);
+    const audio: RefObject<HTMLAudioElement> = React.createRef();
+    const result: any = useSelector<any>(state => state.songs);
 
-ReactDOM.render(
-    <Provider store={store}>
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (result?.playing) {
+            audio.current.src = result.tags.location;
+            audio.current.play();
+            setPlaying(true);
+        } else {
+            audio.current.pause();
+            audio.current.src = '';
+            setPlaying(false);
+        }
+    }, [result]);
+
+    const handleClick = () => {
+        dispatch(changeSong(audio.current.src, false));
+    }
+
+    return (
         <Router>
             <Container inverted="true" fluid style={{ marginTop: '2.85714286em' }}>
+                <Container fluid inverted="true" className="footer">
+                    <audio ref={audio} />
+                    <div style={{ color: "white", fontSize: 16 }}>
+                        {!playing
+                            ? <Icon size="large" name='play' style={{ color: "rgb(51, 51, 51)" }} />
+                            : <Icon size="big" name='stop' onClick={handleClick.bind(this)} style={{ color: "white" }} />
+                        }
+                        {playing && `${result?.tags.artist} - ${result?.tags.title}`}
+                        
+                    </div>
+                </Container>
                 <TabMenu />
                 <Switch>
                     <Route path="/settings">
@@ -84,6 +103,11 @@ ReactDOM.render(
                 </Switch>
             </Container>
         </Router>
+    )
+}
+ReactDOM.render(
+    <Provider store={store}>
+        <MainApp />
     </Provider>,
     document.getElementById('root')
 );

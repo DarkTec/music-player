@@ -14,6 +14,7 @@ import { createStore } from 'redux';
 import reducer from "./redux/reducers";
 import { Provider, useSelector, useDispatch } from 'react-redux';
 import { changeSong } from "redux/actions";
+import Stations from 'components/Stations';
 
 const store = createStore(reducer);
 
@@ -41,7 +42,7 @@ function TabMenu() {
                 <Menu.Item active={route === "/library"} onClick={handleClick.bind(this, "/library")}>
                     <Icon name='music' size='big' /> Library
                     </Menu.Item>
-                <Menu.Item>
+                <Menu.Item active={route === "/stations"} onClick={handleClick.bind(this, "/stations")}>
                     <Icon name='radio' size='big' /> Stations
                     </Menu.Item>
                 <Menu.Item active={route === "/settings"} onClick={handleClick.bind(this, "/settings")}>
@@ -65,9 +66,9 @@ function MainApp() {
             audio.current.play();
             setPlaying(true);
         } else {
+            setPlaying(false);
             audio.current.pause();
             audio.current.src = '';
-            setPlaying(false);
         }
     }, [result]);
 
@@ -96,6 +97,9 @@ function MainApp() {
                     </Route>
                     <Route path="/library">
                         <Library />
+                    </Route>
+                    <Route path="/stations">
+                        <Stations />
                     </Route>
                     <Route path="/">
                         <Dashboard />

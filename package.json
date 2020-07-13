@@ -88,10 +88,14 @@
     "start": "node scripts/start.js --enable-node-worker",
     "build": "node scripts/build.js",
     "test": "snyk test && node scripts/test.js",
-    "release": "release-it"
+    "release": "release-it",
+    "doc": "react-doc-generator src -o DOCUMENTATION.md"
   },
   "eslintConfig": {
-    "extends": "nw-react-app"
+    "extends": "nw-react-app",
+    "rules": {
+        "@typescript-eslint/no-unused-vars": "off"
+      }
   },
   "browserslist": {
     "production": [

@@ -70,7 +70,7 @@ function MainApp() {
             audio.current.pause();
             audio.current.src = '';
         }
-    }, [result]);
+    }, [result, audio]);
 
     const handleClick = () => {
         dispatch(changeSong(audio.current.src, false));

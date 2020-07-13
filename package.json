@@ -36,6 +36,7 @@
     "fs-extra": "^8.1.0",
     "fuse.js": "^6.2.1",
     "html-webpack-plugin": "4.3.0",
+    "icecast-parser": "^3.2.1",
     "identity-obj-proxy": "3.0.0",
     "jest": "24.9.0",
     "jest-environment-jsdom-fourteen": "1.0.1",
@@ -87,10 +88,14 @@
     "start": "node scripts/start.js --enable-node-worker",
     "build": "node scripts/build.js",
     "test": "snyk test && node scripts/test.js",
-    "release": "release-it"
+    "release": "release-it",
+    "doc": "react-doc-generator src -o DOCUMENTATION.md"
   },
   "eslintConfig": {
-    "extends": "nw-react-app"
+    "extends": "nw-react-app",
+    "rules": {
+        "@typescript-eslint/no-unused-vars": "off"
+      }
   },
   "browserslist": {
     "production": [

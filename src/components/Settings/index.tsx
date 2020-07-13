@@ -20,15 +20,15 @@ async function* getFiles(dir) {
 
 function Settings() {
 
-    const [songsDB, setDB] = useState(useIndexedDB('songs'));
-    const [settingsDB, setDB1] = useState(useIndexedDB('settings'));
+    const [songsDB, ] = useState(useIndexedDB('songs'));
+    const [settingsDB, ] = useState(useIndexedDB('settings'));
     const [directory, setDirectory] = useState('');
     const [folders, setFolders] = useState([]);
 
     useEffect(() => {
         updateFolders();
         deleteFolder("C:\\Users\\mantl\\Music\\MusicBee\\Music\\Take That");
-    }, [])
+    })
 
     const deleteFolder = async (folder) => {
         songsDB.openCursor((event: any) => {

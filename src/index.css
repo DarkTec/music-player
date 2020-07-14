@@ -3,11 +3,11 @@ html, body {
 }
 
 .footer {
-    position: fixed; 
-    bottom:  5.1em;
+    position: fixed;
+    bottom: 5.1em;
     padding: 8px 4px;
     left: 0;
     right: 0;
     background-color: rgb(51, 51, 51);
-    border: 1px solid rgb(100,100,100);
+    border: 1px solid rgb(100, 100, 100);
 }

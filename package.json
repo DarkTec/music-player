@@ -34,7 +34,7 @@
     "eslint-plugin-react-hooks": "^1.6.1",
     "file-loader": "4.3.0",
     "fs-extra": "^8.1.0",
-    "fuse.js": "^6.3.1",
+    "fuse.js": "^6.4.0",
     "html-webpack-plugin": "4.3.0",
     "icecast-parser": "^3.2.1",
     "identity-obj-proxy": "3.0.0",

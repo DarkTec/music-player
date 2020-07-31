@@ -68,7 +68,7 @@
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^0.88.2",
     "semver": "6.3.0",
-    "snyk": "^1.359.0",
+    "snyk": "^1.369.0",
     "style-loader": "0.23.1",
     "terser-webpack-plugin": "^2.3.7",
     "ts-pnp": "1.2.0",
@@ -89,13 +89,15 @@
     "build": "node scripts/build.js",
     "test": "snyk test && node scripts/test.js",
     "release": "release-it",
-    "doc": "react-doc-generator src -o DOCUMENTATION.md"
+    "doc": "react-doc-generator src -o DOCUMENTATION.md",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "eslintConfig": {
     "extends": "nw-react-app",
     "rules": {
-        "@typescript-eslint/no-unused-vars": "off"
-      }
+      "@typescript-eslint/no-unused-vars": "off"
+    }
   },
   "browserslist": {
     "production": [
@@ -182,5 +184,6 @@
     "@types/react-redux": "^7.1.9",
     "@types/react-router-dom": "^5.1.5",
     "release-it": "^13.6.4"
-  }
+  },
+  "snyk": true
 }

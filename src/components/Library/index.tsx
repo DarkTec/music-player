@@ -7,7 +7,7 @@ import './index.css';
 import { changeSong } from "redux/actions";
 import { useDispatch, useSelector } from "react-redux";
 
-function App() {
+function Library() {
 
     // eslint-disable-next-line
     const [songsDB, setDB2] = useState(useIndexedDB('songs'));
@@ -120,4 +120,4 @@ function App() {
     );
 }
 
-export default App;
+export default Library;

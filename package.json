@@ -38,7 +38,7 @@
     "html-webpack-plugin": "4.3.0",
     "icecast-parser": "^3.2.1",
     "identity-obj-proxy": "3.0.0",
-    "jest": "24.9.0",
+    "jest": "25.0.0",
     "jest-environment-jsdom-fourteen": "1.0.1",
     "jest-resolve": "24.9.0",
     "jest-watch-typeahead": "0.4.2",

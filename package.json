@@ -9,7 +9,7 @@
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "@types/jest": "^24.9.1",
-    "@types/node": "^12.12.47",
+    "@types/node": "^12.12.48",
     "@types/react": "^16.9.41",
     "@types/react-dom": "^16.9.8",
     "@typescript-eslint/eslint-plugin": "^2.10.0",
@@ -30,7 +30,7 @@
     "eslint-plugin-flowtype": "4.7.0",
     "eslint-plugin-import": "2.22.0",
     "eslint-plugin-jsx-a11y": "6.3.1",
-    "eslint-plugin-react": "7.20.1",
+    "eslint-plugin-react": "7.20.3",
     "eslint-plugin-react-hooks": "^1.6.1",
     "file-loader": "4.3.0",
     "fs-extra": "^8.1.0",
@@ -42,7 +42,7 @@
     "jest-environment-jsdom-fourteen": "1.0.1",
     "jest-resolve": "24.9.0",
     "jest-watch-typeahead": "0.4.2",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "mini-css-extract-plugin": "0.9.0",
     "node-id3": "^0.1.17",
     "nw-builder": "^3.5.7",
@@ -68,7 +68,7 @@
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^0.88.2",
     "semver": "6.3.0",
-    "snyk": "^1.359.0",
+    "snyk": "^1.369.0",
     "style-loader": "0.23.1",
     "terser-webpack-plugin": "^2.3.7",
     "ts-pnp": "1.2.0",
@@ -90,7 +90,9 @@
     "test": "node scripts/test.js",
     "snyk": "snyk test",
     "release": "release-it",
-    "doc": "react-doc-generator src -o DOCUMENTATION.md"
+    "doc": "react-doc-generator src -o DOCUMENTATION.md",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "eslintConfig": {
     "extends": "nw-react-app",
@@ -183,5 +185,6 @@
     "@types/react-redux": "^7.1.9",
     "@types/react-router-dom": "^5.1.5",
     "release-it": "^13.6.4"
-  }
+  },
+  "snyk": true
 }
